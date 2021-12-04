@@ -74,12 +74,14 @@ public class QuestionsList extends AppCompatActivity implements QuestionsAdapter
                 message.setTextColor(getResources().getColor(R.color.colorAccent));
             }
             else {
-                message.setBackgroundResource(R.drawable.correct_item);;
+                message.setBackgroundResource(R.drawable.correct_item);
             }
             if (code.equals("test_questions"))
                 title.setText(getString(R.string.results));
             else title.setText(getString(R.string.menu_previous_attempts));
-            message.setText(getString(R.string.your_score_was) + testScore + "/20");
+
+            String text = getString(R.string.your_score_was) + testScore + "/20";
+            message.setText(text);
             TestQuestionDB[] questionsDB;
             questionsDB = dbHandler.getPreviousTestQuestions(testId);
             for (int i = 0; i < 20; i++) {
@@ -90,10 +92,11 @@ public class QuestionsList extends AppCompatActivity implements QuestionsAdapter
         else if (code.equals("saved_questions")) {
             int savedSize = dbHandler.getSavedSize();
             title.setText(getString(R.string.menu_saved_questions));
-            message.setText(getString(R.string.number_of_saved_questions) + ": " + savedSize);
+            String text = getString(R.string.number_of_saved_questions) + ": " + savedSize;
+            message.setText(text);
             message.setTextColor(getResources().getColor(R.color.orangish));
             if (savedSize > 0) {
-                QuestionDB[] saved = new QuestionDB[savedSize];
+                QuestionDB[] saved;
                 saved = dbHandler.getSaved();
                 for (int i = 0; i < savedSize; i++) {
                     questions.add(saved[i].getQuestion());
@@ -104,8 +107,9 @@ public class QuestionsList extends AppCompatActivity implements QuestionsAdapter
 
         initRecyclerView();
     }
+
     private void initRecyclerView(){
-        RecyclerView recyclerView= findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
         QuestionsAdapter adapter = new QuestionsAdapter(questions, trueOrFalse, code, this, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

@@ -5,11 +5,11 @@ package com.nicktz.boat;
  * απαντήσεων του χρήστη σε αυτές, κάθε φορά που αυτός ολοκληρώνει ένα τεστ.
  */
 public class TriesDB {
-    private int _id;
-    private int testId;
-    private int questionId;
+    private final int _id;
+    private final int testId;
+    private final int questionId;
     private int answer;
-    private int increasing;
+    private final int increasing;
 
     public TriesDB(int _id, int testId, int questionId, int answer, int increasing){
         this._id = _id;

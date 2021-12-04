@@ -5,14 +5,14 @@ package com.nicktz.boat;
  * τις ερωτήσεις δηλαδή που αποτελούν την ύλη της εξέτασης.
  */
 public class QuestionDB {
-    private int _id;
-    private int chapter;
-    private int question_no;
-    private String question;
-    private String choice_1;
-    private String choice_2;
-    private String choice_3;
-    private int correct_answer;
+    private final int _id;
+    private final int chapter;
+    private final int question_no;
+    private final String question;
+    private final String choice_1;
+    private final String choice_2;
+    private final String choice_3;
+    private final int correct_answer;
 
     public QuestionDB(int _id, int chapter, int question_no, String question, String choice_1, String choice_2, String choice_3, int correct_answer){
         this._id = _id;

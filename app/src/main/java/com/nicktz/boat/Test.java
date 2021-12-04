@@ -159,14 +159,14 @@ public class Test extends AppCompatActivity {
     /**
      * Συνάρτηση που δημιουργεί το χρονόμετρο και ορίζει τις λειτουργίες που θα εκτελούνται όταν
      * περνάει ένα δευτερόλεπτο ή όταν ο χρόνος του τεστ τελειώνει.
-     * @param time
      */
     public void initCountDownTimer(long time){
         countDownTimer = new CountDownTimer(time, 1000) {
             public void onTick(long millisUntilFinished) {
                 String addZeroMin = millisUntilFinished < 600000 ? "0":"";
                 String addZeroSec = millisUntilFinished % 60000 < 10000 ? "0":"";
-                timer.setText(addZeroMin + millisUntilFinished / 60000 + ":" + addZeroSec + (millisUntilFinished % 60000)/1000);
+                String text = addZeroMin + millisUntilFinished / 60000 + ":" + addZeroSec + (millisUntilFinished % 60000)/1000;
+                timer.setText(text);
                 timeRemaining = millisUntilFinished;
             }
 
@@ -266,7 +266,8 @@ public class Test extends AppCompatActivity {
      * αριθμό της ερώτησης του τεστ στον οποίο βρισκόμαστε.
      */
     public void setTexts(){
-        counter.setText((current+1) + "/20");
+        String text = (current+1) + "/20";
+        counter.setText(text);
         question.setText(questions[current].getQuestion());
         choice1.setText(questions[current].getChoice_1());
         choice2.setText(questions[current].getChoice_2());

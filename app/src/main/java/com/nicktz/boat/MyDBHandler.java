@@ -103,7 +103,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         if (getQuestionSize() > 0)
             return;
 
-        BufferedReader reader = null;
+        BufferedReader reader;
         try {
             reader = new BufferedReader(new InputStreamReader(context.getAssets().open(file)));
             String text;
@@ -149,6 +149,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_CORRECT_ANSWER, questionDB.getCorrect_answer());
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_QUESTIONS, null, values);
+
         db.close();
     }
 
@@ -162,7 +163,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         int size = cursor.getCount();
+
+        cursor.close();
         db.close();
+
         return size;
     }
 
@@ -178,7 +182,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         Collections.shuffle(Arrays.asList(arr));
 
         int tmp1, tmp2, tmp3, tmp8;
-        String tmp4="", tmp5="", tmp6="", tmp7="";
+        String tmp4, tmp5, tmp6, tmp7;
         SQLiteDatabase db = this.getReadableDatabase();
         for (int i=0; i<20; i++){
             String query = "SELECT * FROM " + TABLE_QUESTIONS + " WHERE " +
@@ -194,8 +198,12 @@ public class MyDBHandler extends SQLiteOpenHelper {
             tmp6 = cursor.getString(5);
             tmp7 = cursor.getString(6);
             questions[i] = new QuestionDB(tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7, tmp8);
+
+            cursor.close();
         }
+
         db.close();
+
         return questions;
     }
 
@@ -209,6 +217,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_SCORE, score);
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_TESTS, null, values);
+
         db.close();
     }
 
@@ -220,7 +229,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         int size = cursor.getCount();
+
+        cursor.close();
         db.close();
+
         return size;
     }
 
@@ -240,7 +252,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
             tests[i][0] = Integer.parseInt(cursor.getString(0));
             tests[i++][1] = Integer.parseInt(cursor.getString(1));
         }
+
+        cursor.close();
         db.close();
+
         return tests;
     }
 
@@ -253,8 +268,12 @@ public class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
+        int testScore = Integer.parseInt(cursor.getString(0));
+
+        cursor.close();
         db.close();
-        return Integer.parseInt(cursor.getString(0));
+
+        return testScore;
     }
 
 
@@ -270,14 +289,19 @@ public class MyDBHandler extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_SAVED_QUESTIONS + " WHERE " + COLUMN_QUESTION_ID + " = " + savedDB.getQuestionId();
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        if (cursor.moveToFirst())
+        if (cursor.moveToFirst()) {
+            cursor.close();
             return false;
+        }
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_ID, currentSavedId++);
         values.put(COLUMN_QUESTION_ID, savedDB.getQuestionId());
         db.insert(TABLE_SAVED_QUESTIONS, null, values);
+
+        cursor.close();
         db.close();
+
         return true;
     }
 
@@ -293,7 +317,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         QuestionDB[] questions = new QuestionDB[cursor.getCount()];
         int tmp1, tmp2, tmp3, tmp8;
-        String tmp4="", tmp5="", tmp6="", tmp7="";
+        String tmp4, tmp5, tmp6, tmp7;
         int i=0;
         cursor.moveToFirst();
         do {
@@ -307,7 +331,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
             tmp7 = cursor.getString(6);
             questions[i++] = new QuestionDB(tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7, tmp8 );
         } while (cursor.moveToNext());
+
+        cursor.close();
         db.close();
+
         return questions;
     }
 
@@ -331,6 +358,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst() && cursor.getString(0) != null )
             currentSavedId = Integer.parseInt(cursor.getString(0)) + 1;
         else currentSavedId = 1;
+
+        cursor.close();
         db.close();
     }
 
@@ -344,7 +373,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
         int tmp1, tmp2, tmp3, tmp8;
-        String tmp4="", tmp5="", tmp6="", tmp7="";
+        String tmp4, tmp5, tmp6, tmp7;
         tmp1 = Integer.parseInt(cursor.getString(0));
         tmp2 = Integer.parseInt(cursor.getString(1));
         tmp3 = Integer.parseInt(cursor.getString(2));
@@ -354,7 +383,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
         tmp6 = cursor.getString(5);
         tmp7 = cursor.getString(6);
         QuestionDB question = new QuestionDB(tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7, tmp8 );
+
+        cursor.close();
         db.close();
+
         return question;
     }
 
@@ -364,6 +396,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public void deleteSaved(int savedQuestionId){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_SAVED_QUESTIONS, COLUMN_QUESTION_ID + " =?", new String[]{Integer.toString(savedQuestionId)});
+
         db.close();
     }
 
@@ -376,7 +409,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         int size = cursor.getCount();
+
+        cursor.close();
         db.close();
+
         return size;
     }
 
@@ -398,6 +434,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             values.put(COLUMN_INCREASING, testQuestions[i].getIncreasing());
             db.insert(TABLE_TEST_QUESTIONS, null, values);
         }
+
         db.close();
     }
 
@@ -424,7 +461,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         TestQuestionDB[] questions = new TestQuestionDB[20];
         int tmp1, tmp6, tmp7;
-        String tmp2="", tmp3="", tmp4="", tmp5="";
+        String tmp2, tmp3, tmp4, tmp5;
         int i=0;
         cursor.moveToFirst();
         do {
@@ -437,7 +474,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
             tmp5 = cursor.getString(4);
             questions[i++] = new TestQuestionDB(tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7);
         } while (cursor.moveToNext());
+
+        cursor.close();
         db.close();
+
         return questions;
     }
 }

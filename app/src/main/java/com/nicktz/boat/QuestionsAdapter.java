@@ -51,7 +51,6 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.View
         else
             holder.question.setText(question.get(position).substring(0,85)+"...");
 
-
         holder.title.setText(context.getString(R.string.question) + " " + (position+1));
     }
 

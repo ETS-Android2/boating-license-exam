@@ -40,13 +40,14 @@ public class MainActivity extends AppCompatActivity {
         Locale locale = getResources().getConfiguration().locale;
         Locale greek = new Locale("el", "GR");
 
-        if (locale.equals(greek)) {
-            return "data-gr.txt";
-        }
-        else {
-            return "data-en.txt";
-        }
+        return "data-gr.txt"; // is wrong but who cares
 
+//        if (locale.equals(greek)) {
+//            return "data-gr.txt";
+//        }
+//        else {
+//            return "data-en.txt";
+//        }
 
 //        Locale locale = new Locale(languageCode);
 //        Locale.setDefault(locale);
@@ -126,12 +127,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         StorageReference storageReference;
-        storageReference = FirebaseStorage.getInstance().getReference();
+        storageReference = FirebaseStorage.getInstance("gs://boating-license-exam.appspot.com").getReference();
         storageReference.child(firebaseFile).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 String url=uri.toString();
-                downloadFile(MainActivity.this, downloadedFileName,".pdf",DIRECTORY_DOWNLOADS, url);
+                downloadFile(MainActivity.this, downloadedFileName,".pdf", DIRECTORY_DOWNLOADS, url);
             }
         });
     }
